@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, IOTA!</title>
+</head>
+
+<body>
+    <h1>Create a new payment</h1>
+    <div id="app">
+        <button v-if="!sending" @click="create_payment" type="button" class="btn btn-primary">Create new</button>
+        <div v-else>
+            <div class="alert alert-success" role="alert">
+               Payment created!
+            </div>
+            <p>Transfer 1 IOTA to the address on your raspberry pi!</p>
+            <pre v-if="message">{{message}}</pre>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script>
+    var app = new Vue({
+    el: '#app',
+    data() {
+        return {
+            sending: false,
+            message: ""
+        }
+    },
+        methods:  {
+            create_payment() {
+                let self = this;
+                this.sending = true;
+
+                fetch('/payments', { method: 'POST' })
+                .then(res => res.json()) // expecting a json response
+                .then(json => {
+                    self.sending = true;
+                    self.message = json;
+                });
+            }
+        }
+    })
+    </script>
+
+</body>
+
+</html>
